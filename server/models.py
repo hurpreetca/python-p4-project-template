@@ -66,6 +66,9 @@ class Discussion(db.Model):
     comments = db.relationship("Comment", backref= "discussion")
     users = db.relationship("User", secondary=user_discussion, back_populates="discussions")
 
+    def __repr__(self):
+        return f"<ID:{self.id}, DISCUSSION-TOPIC:{self.discussion_topic}, CATEGORY:{self.category}>"
+
 
 class Comment(db.Model):
     __tablename__ = "comments"
@@ -77,6 +80,9 @@ class Comment(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     discussion_id =  db.Column(db.Integer, db.ForeignKey("discussions.id"))
+
+    def __repr__(self):
+        return f"<ID:{self.id}, COMMENT-TEXT:{self.comment_text}>"
 
 
 
