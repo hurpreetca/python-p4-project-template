@@ -1,6 +1,8 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm import validates
+import re
 
 from config import db, bcrypt, ma
 
@@ -37,8 +39,21 @@ class User(db.Model):
     def authenticate(self, provided_password):
         return bcrypt.check_password_hash(self._password_hash, provided_password)
 
-
-
+    #VALIDATIONS FOR NAME AND EMAIL
+    @validates("name")
+    def validate_name(self, key, name):
+        pattern = r"^[a-zA-Z]+ [a-zA-Z]+$"
+        if not re.match(pattern, name):
+            raise ValueError("Invalid Input. Only letters and single spaces are allowed.")
+        return name
+    
+#regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+    @validates("email")
+    def validate_email(self, key, email):
+        pattern = r"([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+" 
+        if not re.match(pattern, email):
+            raise ValueError("Invalid email added")
+        return email
 
 class Discussion(db.Model):
     __tablename__ = "discussions"
