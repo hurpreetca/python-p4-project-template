@@ -4,40 +4,41 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import validates
 import re
 
-from config import db, bcrypt, ma
+from config import db, bcrypt
 
 # Models go here!
 
-user_discussion= db.Table(
-    "user_discussions",
-    db.Column("user_id", db.ForeignKey("users.id"), primary_key=True),
-    db.Column("user_id", db.ForeignKey("users.id"), primary_key=True)
-    )
+discussion_tag = db.Table(
+    "discussion_tags",
+    db.Column("discussion_id", db.ForeignKey("discussions.id"), primary_key=True),
+    db.Column("tag_id", db.ForeignKey("tags.id"), primary_key=True))
 
 class User(db.Model):
     __tablename__ = "users"
+    
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True)
     _password_hash = db.Column(db.String) #UNDERSCORE IS A SIGN THAT THE VARIABLE OR METHOD IS FOR INTERNAL USE ONLY 
+    date_joined= db.Column(db.DateTime, server_default=db.func.now())
+    discussions = db.relationship("Discussion", backref= "user")
     comments = db.relationship("Comment", backref= "user")
-    discussions = db.relationship("Discussion", secondary=user_discussion, back_populates="users")
 
     def __repr__(self):
         return f"<ID:{self.id}, NAME:{self.name}, EMAIL:{self.email}>"
     
     @hybrid_property
     def password_hash(self):
-        raise AttributeError("Password Hashed. Denied Access!")
+        raise AttributeError("Access Forbidden!")
     
     @password_hash.setter
     def password_hash(self, password):
-        hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
-        self._password_hash = hashed_password
+        password_hash = bcrypt.generate_password_hash(password.encode("utf-8"))
+        self._password_hash = password_hash.decode("utf-8")
 
     def authenticate(self, provided_password):
-        return bcrypt.check_password_hash(self._password_hash, provided_password)
+        return bcrypt.check_password_hash(self._password_hash, provided_password.encode("utf-8"))
 
     #VALIDATIONS FOR NAME AND EMAIL
     @validates("name")
@@ -63,11 +64,19 @@ class Discussion(db.Model):
     category = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate= db.func.now())
-    comments = db.relationship("Comment", backref= "discussion")
-    users = db.relationship("User", secondary=user_discussion, back_populates="discussions")
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    tags= db.relationship("tag", secondary=discussion_tag, back_populates="discussions")
 
     def __repr__(self):
         return f"<ID:{self.id}, DISCUSSION-TOPIC:{self.discussion_topic}, CATEGORY:{self.category}>"
+
+
+class Tag(db.Model):
+    __tablename__ = "tags"
+
+    id = db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.String)
+    discussions= db.relationship("discussion", secondary=discussion_tag, back_populates="tags")
 
 
 class Comment(db.Model):
@@ -79,10 +88,10 @@ class Comment(db.Model):
     updated_at = db.Column(db.DateTime, onupdate= db.func.now())
 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    discussion_id =  db.Column(db.Integer, db.ForeignKey("discussions.id"))
-
+    discussion_id = db.Column(db.Integer, db.ForeignKey("discussion.id"))
     def __repr__(self):
         return f"<ID:{self.id}, COMMENT-TEXT:{self.comment_text}>"
+    
 
 
 

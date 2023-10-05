@@ -18,12 +18,12 @@ class UserSchema(ma.SQLAlchemySchema):
     id = ma.auto_field()
     name = ma.auto_field()
     email = ma.auto_field()
+    date_joined = ma.auto_field()
     _password_hash = ma.auto_field()
-    comments = ma.Nested("CommentSchema", many=True)
-    discussions = ma.Nested("DiscussionSchema", many=True)
+    discussions = ma.Nested()
 
-single_user_schema = UserSchema()
-plural_user_schema = UserSchema(many=True)
+singular_user_schema = UserSchema(only=("id", "name", "email", "date_joined", "discussions"))
+plural_user_schema = UserSchema(only=("id", "name", "email", "date_joined", "discussions"),many=True)
 
 class DiscussionSchema(ma.SQLAlchemySchema):
     class Meta:
@@ -31,8 +31,14 @@ class DiscussionSchema(ma.SQLAlchemySchema):
     
     id = ma.auto_field()
     discussion_topic = ma.auto_field()
+    category = ma.auto_field()
+    created_at = ma.auto_field()
+    updated_at = ma.auto_field()
+    comments = ma.Nested()
 
-single_discussion_schema = DiscussionSchema()
+
+
+singular_discussion_schema = DiscussionSchema()
 plural_discussion_schema = DiscussionSchema(many=True)
 
 class CommentSchema(ma.SQLAlchemySchema):
@@ -42,7 +48,7 @@ class CommentSchema(ma.SQLAlchemySchema):
     id = ma.auto_field()
     discussion_topic = ma.auto_field()
 
-single_comment_schema = CommentSchema()
+singular_comment_schema = CommentSchema()
 plural_comment_schema = CommentSchema(many=True)
 
 # Views go here!
