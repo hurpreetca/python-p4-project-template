@@ -19,9 +19,31 @@ class UserSchema(ma.SQLAlchemySchema):
     name = ma.auto_field()
     email = ma.auto_field()
     _password_hash = ma.auto_field()
+    comments = ma.Nested("CommentSchema", many=True)
+    discussions = ma.Nested("DiscussionSchema", many=True)
 
 single_user_schema = UserSchema()
 plural_user_schema = UserSchema(many=True)
+
+class DiscussionSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Discussion
+    
+    id = ma.auto_field()
+    discussion_topic = ma.auto_field()
+
+single_discussion_schema = DiscussionSchema()
+plural_discussion_schema = DiscussionSchema(many=True)
+
+class CommentSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Comment
+    
+    id = ma.auto_field()
+    discussion_topic = ma.auto_field()
+
+single_comment_schema = CommentSchema()
+plural_comment_schema = CommentSchema(many=True)
 
 # Views go here!
 
