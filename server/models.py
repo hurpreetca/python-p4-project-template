@@ -61,10 +61,10 @@ class Discussion(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     discussion_topic = db.Column(db.String(100), nullable=False)
-    category = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate= db.func.now())
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    comments = db.relationship("Comment", back_ref="discussion")
     tags= db.relationship("tag", secondary=discussion_tag, back_populates="discussions")
 
     def __repr__(self):
@@ -78,6 +78,8 @@ class Tag(db.Model):
     category = db.Column(db.String)
     discussions= db.relationship("discussion", secondary=discussion_tag, back_populates="tags")
 
+    def __repr__(self):
+        return f"<ID:{self.id}, CATEGORY:{self.category}>"
 
 class Comment(db.Model):
     __tablename__ = "comments"
@@ -87,8 +89,9 @@ class Comment(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate= db.func.now())
 
+
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    discussion_id = db.Column(db.Integer, db.ForeignKey("discussion.id"))
+    discussion_id = db.Column(db.Integer, db.ForeignKey("discussions.id"))
     def __repr__(self):
         return f"<ID:{self.id}, COMMENT-TEXT:{self.comment_text}>"
     
