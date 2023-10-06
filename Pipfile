@@ -12,10 +12,10 @@ sqlalchemy-serializer = "*"
 flask-restful = "*"
 flask-cors = "*"
 faker = "*"
-bcrypt = "*"
-flask-bcrypt = "*"
 flask-marshmallow = "*"
 python-decouple = "*"
+flask-bcrypt = "*"
+marshmallow-sqlalchemy = "*"
 
 [requires]
 python_full_version = "3.8.13"

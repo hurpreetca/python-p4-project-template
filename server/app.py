@@ -6,8 +6,10 @@
 from flask import request, request, make_response, jsonify, session
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
-from config import app, db, api, ma 
+from config import app, api, ma 
 from models import User, Discussion, Comment, Tag
+from flask import request, session
+from flask_restful import Resource
 
 class TagSchema(ma.SQLAlchemySchema):
     class Meta:
@@ -15,7 +17,6 @@ class TagSchema(ma.SQLAlchemySchema):
 
     id = ma.auto_field()
     category = ma.auto_field()
-    discussions = ma.Nested()
 
 singular_tag_schema = TagSchema()
 plural_tag_schema = TagSchema(many=True)
@@ -46,7 +47,7 @@ class DiscussionSchema(ma.SQLAlchemySchema):
     updated_at = ma.auto_field()
     user_id = ma.auto_field()
     comments = ma.Nested(plural_comment_schema)
-    tags = ma.Nested()
+    tags = ma.Nested(plural_tag_schema)
 
 
 
@@ -62,21 +63,24 @@ class UserSchema(ma.SQLAlchemySchema):
     email = ma.auto_field()
     date_joined = ma.auto_field()
     _password_hash = ma.auto_field()
-    discussions = ma.Nested(singular_discussion_schema)
+    discussions = ma.Nested(plural_discussion_schema)
     comments= ma.Nested(plural_comment_schema)
 
 singular_user_schema = UserSchema(only=("id", "name", "email", "date_joined", "discussions"))
 plural_user_schema = UserSchema(only=("id", "name", "email", "date_joined", "discussions"),many=True)
 
 
+#####VIEWS#####VIEWS#####VIEWS#####VIEWS#####VIEWS#####VIEWS#####VIEWS#####
+class Signup(Resource):
+    def post(self):
+        json = request.get_json()
+
+        user = User(name= json.get("name"), email= json.get("email"))
 
 
 
-# Views go here!
 
-@app.route('/')
-def index():
-    return '<h1>Project Server</h1>'
+
 
 
 if __name__ == '__main__':

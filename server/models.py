@@ -1,9 +1,7 @@
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import validates
 import re
-
 from config import db, bcrypt
 
 # Models go here!
@@ -64,8 +62,8 @@ class Discussion(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate= db.func.now())
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    comments = db.relationship("Comment", back_ref="discussion")
-    tags= db.relationship("tag", secondary=discussion_tag, back_populates="discussions")
+    comments = db.relationship("Comment", backref="discussion")
+    tags= db.relationship("Tag", secondary=discussion_tag, back_populates="discussions")
 
     def __repr__(self):
         return f"<ID:{self.id}, DISCUSSION-TOPIC:{self.discussion_topic}, CATEGORY:{self.category}>"
@@ -76,7 +74,7 @@ class Tag(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String)
-    discussions= db.relationship("discussion", secondary=discussion_tag, back_populates="tags")
+    discussions= db.relationship("Discussion", secondary=discussion_tag, back_populates="tags")
 
     def __repr__(self):
         return f"<ID:{self.id}, CATEGORY:{self.category}>"
@@ -95,7 +93,6 @@ class Comment(db.Model):
     def __repr__(self):
         return f"<ID:{self.id}, COMMENT-TEXT:{self.comment_text}>"
     
-
 
 
 

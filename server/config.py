@@ -9,14 +9,14 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_bcrypt import Bcrypt
 from flask_marshmallow import Marshmallow
-from decouple import config
+from decouple import config as con
 
 
 # Local imports
 
 # Instantiate app, set attributes
 app = Flask(__name__)
-app.secret_key = config("SECRET_KEY")
+app.secret_key = con("SECRET_KEY")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -31,13 +31,14 @@ migrate = Migrate(app, db)
 db.init_app(app)
 
 # Instantiate REST API
-api = Api(app)
 
 #Instantiate Bcrypt
-bcyrpt= Bcrypt(app)
+bcrypt= Bcrypt(app)
+
 
 #Instantiate Marshmallow
 ma = Marshmallow(app)
 
+api = Api(app)
 # Instantiate CORS
 CORS(app)
