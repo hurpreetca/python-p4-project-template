@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { useFormik, Field, Form, ErrorMessage } from "formik";
-import "client/src/components/Signup.css";
+import "./Signup.css";
+import { useNavigate } from "react-router-dom";
 
-function Signup() {
-  const [signUp, setSignUp] = useState(false);
+function Signup({ user, setUser }) {
+  const [errors, setErrors] = useState([]);
+  const navigate = useNavigate();
 
   const formSchema = yup.object().shape({
-    name: signUp
-      ? yup.string().required("Must enter a name").max(20)
-      : yup.string().optional(),
+    name: yup.string().required("Must enter a name").max(20),
     email: yup.string().email("Invalid email").required("Must enter email"),
     password: yup.string().required("Password required"),
-    confirmedPassword: signUp
-      ? yup.string().optional()
-      : yup.string().oneOf([yup.ref("password")], "Passwords do not match"),
+    confirmedPassword: yup
+      .string()
+      .oneOf([yup.ref("password")], "Passwords do not match"),
   });
 
   const formik = useFormik({
@@ -25,15 +25,14 @@ function Signup() {
     },
     validationSchema: formSchema,
     onSubmit: (values) => {
-      fetch(signUp ? "/signup" : "/login", {
+      fetch("/signup", {
         method: "POST",
         header: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values, null, 2),
       }).then((res) => {
-        if (res.status == 200) {
-          setRefreshPage(!refreshPage);
+        if (res.ok) {
         }
       });
     },
