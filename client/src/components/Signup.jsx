@@ -3,7 +3,7 @@ import { useFormik, Field, Form, ErrorMessage } from "formik";
 import "./Signup.css";
 import { useNavigate } from "react-router-dom";
 
-function Signup({ user, setUser }) {
+function Signup({ setUser }) {
   const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
 
@@ -33,13 +33,19 @@ function Signup({ user, setUser }) {
         body: JSON.stringify(values, null, 2),
       }).then((res) => {
         if (res.ok) {
+          res.json().then((data) => {
+            console.log(data);
+            setUser(data);
+            navigate("/");
+          });
+        } else {
+          res.json().then((err) => {
+            setErrors([err.errors]);
+          });
         }
       });
     },
   });
-  //   <>
-  //   <h1 className= "header"> SignUp</h1>
-  //   </>
 }
 
 export default Signup;
