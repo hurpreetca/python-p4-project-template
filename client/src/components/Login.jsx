@@ -40,6 +40,42 @@ function Login({ setUser }) {
       });
     },
   });
+  return (
+    <div className="form-container">
+      <h2> User Login</h2>
+      <>
+        <form onSubmit={formik.handleSubmit}>
+          <>
+            <label htmlFor="email">Email</label>
+            <br />
+            <input
+              id="email"
+              name="email"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
+            />
+            <p style={{ color: "red" }}> {formik.errors.email}</p>
+            <br />
+          </>
+          <>
+            <label htmlFor="password">Password</label>
+            <br />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.password}
+            />
+            <p style={{ color: "red" }}> {formik.errors.password}</p>
+          </>
+          <br />
+        </form>
+      </>
+    </div>
+  );
 }
 
 export default Login;
