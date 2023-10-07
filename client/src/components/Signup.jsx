@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFormik, Field, Form, ErrorMessage } from "formik";
+import { useFormik } from "formik";
 import "./Signup.css";
 import { useNavigate } from "react-router-dom";
 
@@ -46,6 +46,70 @@ function Signup({ setUser }) {
       });
     },
   });
+  return (
+    <div className="form-container">
+      <h2>User Signup!</h2>
+      <>
+        <form onSubmit={formik.handleSubmit}>
+          <>
+            <label htmlFor="name">Name</label>
+            <br />
+            <input
+              id="name"
+              name="name"
+              type="name"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.name}
+            />
+            <p style={{ color: "red" }}> {formik.errors.name}</p>
+            <br />
+          </>
+          <>
+            <label htmlFor="email">Email</label>
+            <br />
+            <input
+              id="email"
+              name="email"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
+            />
+            <p style={{ color: "red" }}> {formik.errors.email}</p>
+            <br />
+          </>
+          <>
+            <label htmlFor="password">Password</label>
+            <br />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.password}
+            />
+            <p style={{ color: "red" }}> {formik.errors.password}</p>
+          </>
+          <br />
+          <>
+            <label htmlFor="confirmedPassword">Confirm Password</label>
+            <br />
+            <input
+              id="password"
+              name="confirmedPassword"
+              type="confirmedPassword"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.confirmedPassword}
+            />
+            <p style={{ color: "red" }}> {formik.errors.confirmedPassword}</p>
+          </>
+          <br />
+        </form>
+      </>
+    </div>
+  );
 }
 
 export default Signup;

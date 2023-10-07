@@ -19,7 +19,7 @@ function Login({ setUser }) {
     },
     validationSchema: formSchema,
     onSubmit: (values) => {
-      fetch("/signup", {
+      fetch("/login", {
         method: "POST",
         header: {
           "Content-Type": "application/json",
@@ -32,19 +32,14 @@ function Login({ setUser }) {
             setUser(data);
             navigate("/");
           });
-        }
-        else{
-          res.json().then((err)=>{
+        } else {
+          res.json().then((err) => {
             setErrors([err.errors]);
-          }
-          )
+          });
         }
       });
     },
   });
-  return (
-    
-  )
 }
 
-export default Signup;
+export default Login;
