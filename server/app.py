@@ -168,8 +168,17 @@ class Discussions(Resource):
     def get(self):
         discussion_list = [singular_discussion_schema.dump(discussion) for discussion in Discussion.query.all()]
         return {"discussion_list": discussion_list}, 200
+    def post(self):
+        discussion_topic = request.form.get("discussion_topic")
+        tags = request.form.get("tags")
+        
+api.add_resource(Discussions, "/discussions")
 
 class DiscussionById(Resource):
+    def get(self,id ):
+        comments_list = [plural_comment_schema.dump(comment) for comment in Comment.query.all()]
+
+        
     def patch(self, id):
         data = request.get_json()
 
@@ -181,6 +190,7 @@ class DiscussionById(Resource):
         if not discussion:
             return {"error": "Discussion not found"}, 404
         # for comments
+        comment = Comment.query.filter_by(Discussion.id == id).all()
 
 
 

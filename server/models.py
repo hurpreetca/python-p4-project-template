@@ -62,7 +62,7 @@ class Discussion(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate= db.func.now())
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    comments = db.relationship("Comment", backref="discussion")
+    comments = db.relationship("Comment", backref="discussion",cascade="all,delete-orphan")
     tags= db.relationship("Tag", secondary=discussion_tag, back_populates="discussions")
 
     def __repr__(self):
