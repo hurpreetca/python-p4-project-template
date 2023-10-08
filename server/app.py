@@ -168,29 +168,80 @@ class Discussions(Resource):
     def get(self):
         discussion_list = [singular_discussion_schema.dump(discussion) for discussion in Discussion.query.all()]
         return {"discussion_list": discussion_list}, 200
+    
     def post(self):
-        discussion_topic = request.form.get("discussion_topic")
-        tags = request.form.get("tags")
+        data = request.get_json()
         
+
+        if not data.get("discussion_topic"):
+            return {"errors": ["empty body"]}, 400
+        
+        user_id = data.get("user_id")
+
+        discussion = Discussion(discussion_topic=data["discussion_topic"], user_id=user_id)
+
+
+        try:
+            db.session.add(discussion)
+            db.session.commit()
+            return singular_discussion_schema.dump(discussion), 201
+
+        except IntegrityError as e:
+            errors = []
+
+            if isinstance(e, (IntegrityError)):
+                for err in e.orig.args:
+                    errors.append(str(err))
+
+            return {"errors": errors}, 422
+
+
 api.add_resource(Discussions, "/discussions")
 
 class DiscussionById(Resource):
-    def get(self,id ):
-        comments_list = [plural_comment_schema.dump(comment) for comment in Comment.query.all()]
+    def get(self,id):
+        discussion = Discussion.query.get(id)  
+        if not discussion:
+            return {"error": "Discussion not found"}, 404
+
+        discussion_data = singular_discussion_schema.dump(discussion)
+
+        return {"discussion": discussion_data}, 200
 
         
     def patch(self, id):
         data = request.get_json()
 
-        discussion = Discussion.query.filter_by(Discussion.id == id).first()
-    pass
-
-    def delete(self, id):
-        discussion = Discussion.query.filter_by(Discussion.id == id).first()
+        discussion = Discussion.query.filter(Discussion.id ==id).first()
         if not discussion:
             return {"error": "Discussion not found"}, 404
-        # for comments
-        comment = Comment.query.filter_by(Discussion.id == id).all()
+
+        updated_discussion = singular_discussion_schema.load(data, instance=discussion)
+        
+
+        
+        db.session.commit()
+        return {"message": "Discussion updated"}, 200
+
+    
+    def delete(self, id):
+        discussion_topic = Discussion.query.filter(Discussion.id == id).first()
+        try:
+            db.session.delete(discussion_topic)
+            db.session.commit()
+            return {"message": "Discussion deleted"}, 202
+        except IntegrityError as e:
+            errors = []
+
+            if isinstance(e, (IntegrityError)):
+                for err in e.orig.args:
+                    errors.append(str(err))
+
+            return {"errors": errors}, 422
+
+api.add_resource(DiscussionById, "/discussions/<int:id>")
+
+       
 
 
 

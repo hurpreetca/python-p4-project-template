@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 import random
-from random import randint, choice as rc
+from random import randint, choice as rc, sample
 from faker import Faker
 from config import db, app  
-from models import User, Discussion, Comment, Tag
+from models import *
 
 if __name__ == '__main__':
     fake = Faker()
@@ -15,6 +15,7 @@ if __name__ == '__main__':
         Discussion.query.delete()
         Comment.query.delete()
         Tag.query.delete()
+        db.session.query(discussion_tag).delete()
 
 
         print("...Creating Users...")
@@ -100,7 +101,26 @@ if __name__ == '__main__':
         ]
         db.session.add_all(tag_data)
         db.session.commit()
-    print("Seeding completed\n")
+
+        print("...Creating relationships...")
+        discussions = Discussion.query.all()
+        tags = Tag.query.all()
+
+        num_discussion_prefs = randint(1, len(discussions))
+        num_tag_prefs = randint(1, len(tags))
+
+        discussion_prefs = sample(discussions, num_discussion_prefs)
+        tag_prefs = sample(tags, num_tag_prefs)
+
+
+        for discussion in discussion_prefs:
+            
+            discussion_tag_relation = discussion_tag.insert().values(
+                    discussion_id=discussion.id)
+    
+        db.session.commit()
+
+        print("Seeding completed\n")
 
 
 
