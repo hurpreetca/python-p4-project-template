@@ -4,7 +4,7 @@ import "./Login.css";
 import { useHistory } from "react-router-dom";
 import * as yup from "yup";
 
-function Login({ setUser }) {
+function Login({ onLogin, setIsLoggedIn, setUserId }) {
   const [errors, setErrors] = useState([]);
   const navigate = useHistory();
 
@@ -28,10 +28,12 @@ function Login({ setUser }) {
         body: JSON.stringify(values, null, 2),
       }).then((res) => {
         if (res.ok) {
-          res.json().then((data) => {
-            console.log(data);
-            setUser(data);
-            navigate("/");
+          res.json().then((user) => {
+            console.log(user);
+            onLogin(user);
+            setIsLoggedIn(true);
+            setUserId(user.id);
+            navigate.push("/home");
           });
         } else {
           res.json().then((err) => {
