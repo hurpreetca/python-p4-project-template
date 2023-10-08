@@ -1,33 +1,30 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import "./Signup.css";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import * as yup from "yup";
 
-function Signup({ setUser }) {
+function Signup({ user, setUser }) {
   const [errors, setErrors] = useState([]);
-  const navigate = useNavigate();
+  const navigate = useHistory();
 
   const formSchema = yup.object().shape({
     name: yup.string().required("Must enter a name").max(20),
     email: yup.string().email("Invalid email").required("Must enter email"),
-    password: yup.string().required("Password required"),
-    confirmedPassword: yup
-      .string()
-      .oneOf([yup.ref("password")], "Passwords do not match"),
+    password_hash: yup.string().required("Password required"),
   });
 
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
-      password: "",
-      confirmedPassword: "",
+      password_hash: "",
     },
     validationSchema: formSchema,
     onSubmit: (values) => {
       fetch("/signup", {
         method: "POST",
-        header: {
+        headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values, null, 2),
@@ -79,33 +76,19 @@ function Signup({ setUser }) {
             <br />
           </>
           <>
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password_hash">Password</label>
             <br />
             <input
-              id="password"
-              name="password"
+              id="password_hash"
+              name="password_hash"
               type="password"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.password}
+              value={formik.values.password_hash}
             />
-            <p style={{ color: "red" }}> {formik.errors.password}</p>
+            <p style={{ color: "red" }}> {formik.errors.password_hash}</p>
           </>
-          <br />
-          <>
-            <label htmlFor="confirmedPassword">Confirm Password</label>
-            <br />
-            <input
-              id="password"
-              name="confirmedPassword"
-              type="confirmedPassword"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.confirmedPassword}
-            />
-            <p style={{ color: "red" }}> {formik.errors.confirmedPassword}</p>
-          </>
-          <br />
+          <button type="submit">{"Sign Up"}</button>
         </form>
       </>
     </div>

@@ -1,27 +1,28 @@
 import React, { useState } from "react";
-import { useFormik, Field, Form, ErrorMessage } from "formik";
+import { useFormik } from "formik";
 import "./Login.css";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import * as yup from "yup";
 
 function Login({ setUser }) {
   const [errors, setErrors] = useState([]);
-  const navigate = useNavigate();
+  const navigate = useHistory();
 
   const formSchema = yup.object().shape({
     email: yup.string().email("Invalid email").required("Must enter email"),
-    password: yup.string().required("Password required"),
+    password_hash: yup.string().required("Password required"),
   });
 
   const formik = useFormik({
     initialValues: {
       email: "",
-      password: "",
+      password_hash: "",
     },
     validationSchema: formSchema,
     onSubmit: (values) => {
       fetch("/login", {
         method: "POST",
-        header: {
+        headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values, null, 2),
@@ -59,19 +60,20 @@ function Login({ setUser }) {
             <br />
           </>
           <>
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password_hash">Password</label>
             <br />
             <input
-              id="password"
-              name="password"
+              id="password_hash"
+              name="password_hash"
               type="password"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.password}
+              value={formik.values.password_hash}
             />
-            <p style={{ color: "red" }}> {formik.errors.password}</p>
+            <p style={{ color: "red" }}> {formik.errors.password_hash}</p>
           </>
           <br />
+          <button type="submit">{"Login"}</button>
         </form>
       </>
     </div>
