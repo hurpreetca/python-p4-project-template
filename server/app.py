@@ -219,7 +219,8 @@ class DiscussionById(Resource):
             return {"errors": ["Comment text is required"]}, 400
         comment = Comment(comment_text=data["comment_text"], user_id=user_id, discussion_id= id)
 
-
+        def post(self, id):
+            pass
         try:
             db.session.add(comment)
             db.session.commit()
@@ -283,8 +284,6 @@ class DiscussionById(Resource):
 api.add_resource(DiscussionById, "/discussions/<int:id>")
 
        
-
-
 
 
 if __name__ == '__main__':
