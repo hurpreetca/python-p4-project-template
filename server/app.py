@@ -238,18 +238,31 @@ class DiscussionById(Resource):
     def patch(self, id):
         data = request.get_json()
 
-        discussion = Discussion.query.filter(Discussion.id ==id).first()
-        if not discussion:
-            return {"error": "Discussion not found"}, 404
-        
         user_id = data.get("user_id")
 
-        updated_discussion = singular_discussion_schema.load(data, instance=discussion)
         
+        discussion = Discussion.query.get(id)
+        if not discussion:
+            return {"error": "Discussion not found"}, 404
 
         
-        db.session.commit()
-        return {"message": "Discussion updated"}, 200
+        if "discussion_topic" in data:
+            discussion.discussion_topic = data["discussion_topic"]
+
+        try:
+            db.session.commit()
+            return singular_discussion_schema.dump(discussion), 200
+
+        except IntegrityError as e:
+            errors = []
+
+            if isinstance(e, IntegrityError):
+                for err in e.orig.args:
+                    errors.append(str(err))
+
+            return {"errors": errors}, 422
+        
+       
 
     
     def delete(self, id):
