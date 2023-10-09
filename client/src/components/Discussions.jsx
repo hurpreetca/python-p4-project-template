@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
+import DiscussionList from "./DiscussionList.jsx";
 
 function Discussions() {
-  let { id } = useParams();
   const [discussions, setDiscussions] = useState([]);
-
+  // Fetch all the discussions
   useEffect(() => {
     fetch("/discussions")
-      .then((res) => res.json())
-      .then(setDiscussions);
-  }, []);
+      .then((response) => response.json())
+      .then((data) => {
+        setDiscussions(data);
+        console.log("this is discussions data", discussions);
+      });
+  });
 
-  const allDiscussions = discussions.map((discussion) => {});
-  return <div>Discussions</div>;
+  return (
+    <div className="main-div">
+      <DiscussionList discussions={discussions} />
+    </div>
+  );
 }
 
 export default Discussions;

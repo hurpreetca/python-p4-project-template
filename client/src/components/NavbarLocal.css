@@ -1,0 +1,22 @@
+.navbar-custom {
+  width: 100%;
+  color: white;
+}
+
+.user-name-with-space {
+  margin-right: 15px;
+}
+
+.navbar-logo {
+  width: 60px;
+  height: auto;
+  margin-right: 10px;
+  padding: 0;
+}
+
+.brand-text {
+  font-size: larger;
+  font-style: italic;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}

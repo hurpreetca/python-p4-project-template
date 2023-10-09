@@ -5,6 +5,7 @@ import Signup from "./Signup.jsx";
 import Home from "./Home.jsx";
 import Discussions from "./Discussions.jsx";
 import NavbarLocal from "./NavbarLocal.jsx";
+
 function App() {
   const [user, setUser] = useState(null);
   const [userId, setUserId] = useState(null);
@@ -21,6 +22,7 @@ function App() {
         console.log("Fetch User", res);
         res.json().then((userData) => {
           setUserId(userData.id);
+          console.log(userData.id);
           setUser(userData);
           setIsLoggedIn(true);
         });
@@ -32,6 +34,7 @@ function App() {
       }
     });
   };
+
   const onLogin = (user) => setUser(user);
   const handleLogout = () => {
     fetch("/logout", {
@@ -45,6 +48,9 @@ function App() {
         console.error("Logout error:", res.statusText);
       }
     });
+  };
+  const handleDelete = (discussionId) => {
+    fetch("/discussions/${discussionId");
   };
 
   return (
@@ -71,7 +77,7 @@ function App() {
         <Home />
       </Route>
       <Route exact path="/discussions">
-        <Discussions user={user} userId={userId} />
+        <Discussions user={user} userId={userId} isLoggedIn={isLoggedIn} />
       </Route>
     </Switch>
   );
