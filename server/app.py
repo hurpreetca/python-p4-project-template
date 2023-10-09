@@ -210,21 +210,14 @@ class DiscussionById(Resource):
 
         return {"discussion": discussion_data}, 200
     
-    def post(self, discussion_id):
+    def post(self, id):
         data = request.get_json()
-
-       
-        if not data.get("email"):
-            return {"errors": ["User must be logged in to comment"]}, 401
-        
-        if not data.get("discussion_topic"):
-            return {"errors": ["Discussion topic is required"]}, 400
         
         user_id = data.get("user_id")
         
         if not data.get("comment_text"):
             return {"errors": ["Comment text is required"]}, 400
-        comment = Comment(comment_text=data["comment_text"], user_id=user_id, discussion_id=discussion_id)
+        comment = Comment(comment_text=data["comment_text"], user_id=user_id, discussion_id= id)
 
 
         try:
