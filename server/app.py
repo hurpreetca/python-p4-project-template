@@ -172,6 +172,8 @@ class Discussions(Resource):
     def post(self):
         data = request.get_json()
         
+        if not data.get("email"):
+            return {"errors": ["User must be logged in to create a discussion"]}, 401
 
         if not data.get("discussion_topic"):
             return {"errors": ["empty body"]}, 400
@@ -207,6 +209,37 @@ class DiscussionById(Resource):
         discussion_data = singular_discussion_schema.dump(discussion)
 
         return {"discussion": discussion_data}, 200
+    
+    def post(self, discussion_id):
+        data = request.get_json()
+
+       
+        if not data.get("email"):
+            return {"errors": ["User must be logged in to comment"]}, 401
+        
+        if not data.get("discussion_topic"):
+            return {"errors": ["Discussion topic is required"]}, 400
+        
+        user_id = data.get("user_id")
+        
+        if not data.get("comment_text"):
+            return {"errors": ["Comment text is required"]}, 400
+        comment = Comment(comment_text=data["comment_text"], user_id=user_id, discussion_id=discussion_id)
+
+
+        try:
+            db.session.add(comment)
+            db.session.commit()
+            return singular_comment_schema.dump(comment), 201
+
+        except IntegrityError as e:
+            errors = []
+
+            if isinstance(e, (IntegrityError)):
+                for err in e.orig.args:
+                    errors.append(str(err))
+
+            return {"errors": errors}, 422
 
         
     def patch(self, id):
@@ -215,6 +248,8 @@ class DiscussionById(Resource):
         discussion = Discussion.query.filter(Discussion.id ==id).first()
         if not discussion:
             return {"error": "Discussion not found"}, 404
+        
+        user_id = data.get("user_id")
 
         updated_discussion = singular_discussion_schema.load(data, instance=discussion)
         
