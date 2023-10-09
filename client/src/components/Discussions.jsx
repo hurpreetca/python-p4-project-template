@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import DiscussionList from "./DiscussionList.jsx";
+import ListGroup from "react-bootstrap/ListGroup";
 
-function Discussions() {
-  const [discussions, setDiscussions] = useState([]);
-  // Fetch all the discussions
-  useEffect(() => {
-    fetch("/discussions")
-      .then((response) => response.json())
-      .then((data) => {
-        setDiscussions(data);
-        console.log("this is discussions data", discussions);
-      });
+function Discussions({ user, userId, isLoggedIn, discussions }) {
+  const displayDiscussions = discussions.map((discussion) => {
+    return (
+      <DiscussionList
+        key={discussion.id}
+        id={discussion.id}
+        discussion_topic={discussion.discussion_topic}
+        user_id={discussion.user_id}
+      />
+    );
   });
-
   return (
-    <div className="main-div">
-      <DiscussionList discussions={discussions} />
-    </div>
+    <>
+      {" "}
+      <ListGroup variant="flush">{displayDiscussions}</ListGroup>
+    </>
   );
 }
 
