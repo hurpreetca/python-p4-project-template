@@ -46,52 +46,56 @@ function Signup({ setIsLoggedIn, fetchUser }) {
   });
   return (
     <div className="form-container">
-      <h2>User Signup!</h2>
-      <>
-        <form onSubmit={formik.handleSubmit}>
-          <>
-            <label htmlFor="name">Name</label>
-            <br />
-            <input
-              id="name"
-              name="name"
-              type="name"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.name}
-            />
-            <p style={{ color: "red" }}> {formik.errors.name}</p>
-            <br />
-          </>
-          <>
-            <label htmlFor="email">Email</label>
-            <br />
-            <input
-              id="email"
-              name="email"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.email}
-            />
-            <p style={{ color: "red" }}> {formik.errors.email}</p>
-            <br />
-          </>
-          <>
-            <label htmlFor="password_hash">Password</label>
-            <br />
-            <input
-              id="password_hash"
-              name="password_hash"
-              type="password"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.password_hash}
-            />
-            <p style={{ color: "red" }}> {formik.errors.password_hash}</p>
-          </>
-          <button type="submit">{"Sign Up"}</button>
-        </form>
-      </>
+      <h2 className="form-heading">User Signup!</h2>
+      <form className="signup-form" onSubmit={formik.handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="name" className="form-label">
+            Name
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="name"
+            className="form-input"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.name}
+          />
+          <p className="error-text">{formik.errors.name}</p>
+        </div>
+        <div className="form-group">
+          <label htmlFor="email" className="form-label">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            className="form-input"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+          />
+          <p className="error-text">{formik.errors.email}</p>
+        </div>
+        <div className="form-group">
+          <label htmlFor="password_hash" className="form-label">
+            Password
+          </label>
+          <input
+            id="password_hash"
+            name="password_hash"
+            type="password"
+            className="form-input"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.password_hash}
+          />
+          <p className="error-text">{formik.errors.password_hash}</p>
+        </div>
+        <button type="submit" className="signup-button">
+          Sign Up
+        </button>
+      </form>
     </div>
   );
 }

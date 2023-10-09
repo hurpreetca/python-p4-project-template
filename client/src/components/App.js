@@ -12,7 +12,10 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [errors, setErrors] = useState([]);
   const [discussions, setDiscussions] = useState([]);
-  const onLogin = (user) => setUser(user);
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   const fetchUser = () => {
     fetch("/current_user").then((res) => {
@@ -27,14 +30,15 @@ function App() {
       }
     });
   };
+  const onLogin = (user) => setUser(user);
   // Fetch all the discussions
   useEffect(() => {
     try {
       fetch("/discussions")
         .then((response) => response.json())
         .then((data) => {
+          console.log("this is data", data);
           setDiscussions(data.discussion_list);
-          console.log("this is discussion", discussions);
         });
     } catch (error) {
       console.error("error fecthing data", error);
@@ -81,12 +85,7 @@ function App() {
           <Home />
         </Route>
         <Route exact path="/discussions">
-          <Discussions
-            discussions={discussions}
-            user={user}
-            userId={userId}
-            isLoggedIn={isLoggedIn}
-          />
+          <Discussions discussions={discussions} />
         </Route>
       </Switch>
     </div>

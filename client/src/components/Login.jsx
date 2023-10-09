@@ -45,39 +45,47 @@ function Login({ onLogin, setIsLoggedIn, setUserId }) {
   });
   return (
     <div className="form-container">
-      <h2> User Login</h2>
-      <>
-        <form onSubmit={formik.handleSubmit}>
-          <>
-            <label htmlFor="email">Email</label>
-            <br />
-            <input
-              id="email"
-              name="email"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.email}
-            />
-            <p style={{ color: "red" }}> {formik.errors.email}</p>
-            <br />
-          </>
-          <>
-            <label htmlFor="password_hash">Password</label>
-            <br />
-            <input
-              id="password_hash"
-              name="password_hash"
-              type="password"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.password_hash}
-            />
-            <p style={{ color: "red" }}> {formik.errors.password_hash}</p>
-          </>
-          <br />
-          <button type="submit">{"Login"}</button>
-        </form>
-      </>
+      <h2>User Login</h2>
+      <form onSubmit={formik.handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+          />
+          <p className="error-text">{formik.errors.email}</p>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="password_hash">Password</label>
+          <input
+            id="password_hash"
+            name="password_hash"
+            type="password"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.password_hash}
+          />
+          <p className="error-text">{formik.errors.password_hash}</p>
+        </div>
+
+        <div className="button-container">
+          <button type="submit" className="login-button">
+            Login
+          </button>
+          <button
+            type="button"
+            className="signup-button"
+            onClick={() => navigate.push("/signup")}
+          >
+            Signup
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

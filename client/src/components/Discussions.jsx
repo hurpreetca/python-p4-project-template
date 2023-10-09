@@ -1,9 +1,8 @@
 import React from "react";
 import DiscussionList from "./DiscussionList.jsx";
-import ListGroup from "react-bootstrap/ListGroup";
 
-function Discussions({ user, userId, isLoggedIn, discussions }) {
-  const displayDiscussions = discussions.map((discussion) => {
+function Discussions({  discussions }) {
+  return discussions.map((discussion) => {
     return (
       <DiscussionList
         key={discussion.id}
@@ -13,12 +12,6 @@ function Discussions({ user, userId, isLoggedIn, discussions }) {
       />
     );
   });
-  return (
-    <>
-      {" "}
-      <ListGroup variant="flush">{displayDiscussions}</ListGroup>
-    </>
-  );
 }
 
 export default Discussions;
