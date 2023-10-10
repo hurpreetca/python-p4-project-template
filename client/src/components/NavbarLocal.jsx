@@ -30,9 +30,9 @@ function NavbarLocal(setUser, setIsLoggedIn, setUserId) {
         className="bg-body-tertiary"
       >
         <Container>
-          <Navbar.Brand href="/home">Pocket-Reddit</Navbar.Brand>
+          <Navbar.Brand href="/">Pocket-Reddit</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/home">
+            <Nav.Link as={Link} to="/">
               Home
             </Nav.Link>
             <Nav.Link as={Link} to="/discussions">

@@ -81,7 +81,7 @@ function App() {
             onLogin={onLogin}
           />
         </Route>
-        <Route exact path="/home">
+        <Route exact path="/">
           <Home />
         </Route>
         <Route exact path="/discussions">

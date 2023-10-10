@@ -1,0 +1,80 @@
+.main-container {
+  max-height: 100vh;
+  overflow-y: auto;
+}
+.bg-img {
+  background-image: url("https://www.forum.lu/wp-content/uploads/2021/06/public-forum.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+.welcome-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.welcome-box {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  width: 80%;
+  max-width: 600px;
+}
+
+.title {
+  margin-bottom: 5px;
+}
+
+.title h2 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.header {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.text-body h4 {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+ul li {
+  margin: 5px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.login-button,
+.signup-button {
+  flex: 1;
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover,
+.signup-button:hover {
+  background-color: #0056b3;
+}

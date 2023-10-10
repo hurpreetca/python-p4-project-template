@@ -1,13 +1,12 @@
 import React from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import Table from "react-bootstrap/Table";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory } from "react-router-dom";
 
 function DiscussionList({ id, discussion_topic }) {
   const history = useHistory();
   function handleClick(id) {
     const idAsInt = parseInt(id, 10);
-    console.log(idAsInt);
     history.push(`/discussions/${idAsInt}`);
   }
   return (

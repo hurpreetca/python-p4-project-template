@@ -33,7 +33,7 @@ function Login({ onLogin, setIsLoggedIn, setUserId }) {
             onLogin(user);
             setIsLoggedIn(true);
             setUserId(user.id);
-            navigate.push("/home");
+            navigate.push("/");
           });
         } else {
           res.json().then((err) => {

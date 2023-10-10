@@ -34,7 +34,7 @@ function Signup({ setIsLoggedIn, fetchUser }) {
             console.log(data);
             setIsLoggedIn(true);
             fetchUser(data);
-            navigate.push("/home");
+            navigate.push("/");
           });
         } else {
           res.json().then((err) => {
