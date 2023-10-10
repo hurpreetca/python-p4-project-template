@@ -15,9 +15,10 @@ function DiscussionDetails({ userId }) {
     fetch(`/discussions/${idAsInt}`)
       .then((res) => res.json())
       .then((data) => setSelectedDiscussion(data.discussion));
-  }, [idAsInt]);
+  }, [idAsInt, newComment]);
 
   const discussion_topic = selectedDiscussion.discussion_topic;
+  const discussion_user_id = selectedDiscussion.user_id;
   const comments = selectedDiscussion.comments;
 
   //Edit a discussion topic
@@ -40,7 +41,7 @@ function DiscussionDetails({ userId }) {
       method: "DELETE",
     })
       .then((res) => {
-        if (res.status === 204) {
+        if (res.status === 202) {
           history.push("/discussions");
         } else {
           console.error("Failed to delete discussion");
@@ -87,9 +88,11 @@ function DiscussionDetails({ userId }) {
             <strong>Discussion Topic: </strong>
             {discussion_topic}
           </h3>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <Button variant="danger" onClick={handleEditDiscussion}>
-            Edit
+            &nbsp;&nbsp;&nbsp;Edit&nbsp;&nbsp;&nbsp;
           </Button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <Button variant="danger" onClick={handleDeleteDiscussion}>
             Delete
           </Button>

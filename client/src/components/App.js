@@ -6,6 +6,8 @@ import Home from "./Home.jsx";
 import Discussions from "./Discussions.jsx";
 import NavbarLocal from "./NavbarLocal.jsx";
 import DiscussionDetails from "./DiscussionDetails.jsx";
+import NewDiscussion from "./NewDiscussion.jsx";
+import { useHistory } from "react-router-dom";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -13,6 +15,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [errors, setErrors] = useState([]);
   const [discussions, setDiscussions] = useState([]);
+  const history = useHistory();
 
   useEffect(() => {
     fetchUser();
@@ -50,10 +53,11 @@ function App() {
     fetch("/logout", {
       method: "DELETE",
     }).then((res) => {
-      if (res.status === 204) {
+      if (res.status === 200) {
         setIsLoggedIn(false);
         setUser(null);
         setUserId(null);
+        history.push("/");
       } else {
         console.error("Logout error:", res.statusText);
       }
@@ -62,7 +66,7 @@ function App() {
 
   return (
     <div>
-      <NavbarLocal user={user} handleLogout={handleLogout} />
+      <NavbarLocal handleLogout={handleLogout} isLoggedIn={isLoggedIn} />
       <Switch>
         <Route exact path="/navbar">
           <NavbarLocal />{" "}
@@ -90,6 +94,9 @@ function App() {
         </Route>
         <Route exact path="/discussions/:id">
           <DiscussionDetails discussions={discussions} userId={userId} />
+        </Route>
+        <Route exact path="/newdiscussion">
+          <NewDiscussion userId={userId} setDiscussions={setDiscussions} />
         </Route>
       </Switch>
     </div>

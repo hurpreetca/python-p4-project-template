@@ -6,21 +6,7 @@ import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import "./NavbarLocal.css";
 
-function NavbarLocal(setUser, setIsLoggedIn, setUserId) {
-  console.log(setUser);
-  const handleLogout = () => {
-    fetch("/logout", {
-      method: "DELETE",
-    }).then((res) => {
-      if (res.status === 204) {
-        setIsLoggedIn(false);
-        setUser(null);
-        setUserId(null);
-      } else {
-        console.error("Logout error:", res.statusText);
-      }
-    });
-  };
+function NavbarLocal({ handleLogout, isLoggedIn }) {
   return (
     <div className="navbar">
       <Navbar
@@ -38,17 +24,17 @@ function NavbarLocal(setUser, setIsLoggedIn, setUserId) {
             <Nav.Link as={Link} to="/discussions">
               Discussions
             </Nav.Link>
+            <Nav.Link as={Link} to="/newdiscussion">
+              Add Discussion
+            </Nav.Link>
           </Nav>
           <div>
-            {!setUser || setUser.error ? (
+            {!isLoggedIn ? (
               <Nav.Link as={Link} to="/login" className="ml-auto">
-                <Button variant="primary" onClick={handleLogout}>
-                  Login
-                </Button>
+                <Button variant="primary">Login</Button>
               </Nav.Link>
             ) : (
               <div className="user-info">
-                <span className="user-name-with-space">👤: {setUser.name}</span>
                 <Button variant="secondary" onClick={handleLogout}>
                   Logout
                 </Button>

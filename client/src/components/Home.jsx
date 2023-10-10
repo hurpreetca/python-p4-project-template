@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import "./Home.css";
 
 function Home({ isLoggedIn }) {
+  console.log(isLoggedIn);
   const navigate = useHistory();
   return (
     <div className="main-container">
@@ -85,21 +86,28 @@ function Home({ isLoggedIn }) {
               </div>
             </div>
             <div className="get-started"></div>
+
             <div className="button-container">
-              <button
-                type="button"
-                className="signup-button"
-                onClick={() => navigate.push("/login")}
-              >
-                Login
-              </button>
-              <button
-                type="button"
-                className="signup-button"
-                onClick={() => navigate.push("/signup")}
-              >
-                Signup
-              </button>
+              {!isLoggedIn ? (
+                <>
+                  <button
+                    type="button"
+                    className="signup-button"
+                    onClick={() => navigate.push("/login")}
+                  >
+                    Login
+                  </button>
+                  <button
+                    type="button"
+                    className="signup-button"
+                    onClick={() => navigate.push("/signup")}
+                  >
+                    Signup
+                  </button>
+                </>
+              ) : (
+                <p></p>
+              )}
             </div>
           </div>
         </div>
