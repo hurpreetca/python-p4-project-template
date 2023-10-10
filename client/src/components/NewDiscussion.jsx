@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 
-function NewDiscussion({ setDiscussions, userId }) {
+function NewDiscussion({ discussions, setDiscussions, userId }) {
   const [discussionTopic, setDiscussionTopic] = useState("");
   const history = useHistory();
-
+  console.log(discussions);
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -19,9 +19,7 @@ function NewDiscussion({ setDiscussions, userId }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(discussion_topic: newDiscussion,
-        user_id: UserId
-        ),
+      body: JSON.stringify(newDiscussion),
     })
       .then((response) => response.json())
       .then((createdDiscussion) => {

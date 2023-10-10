@@ -96,7 +96,11 @@ function App() {
           <DiscussionDetails discussions={discussions} userId={userId} />
         </Route>
         <Route exact path="/newdiscussion">
-          <NewDiscussion userId={userId} setDiscussions={setDiscussions} />
+          <NewDiscussion
+            userId={userId}
+            discussions={discussions}
+            setDiscussions={setDiscussions}
+          />
         </Route>
       </Switch>
     </div>
