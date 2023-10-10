@@ -5,6 +5,7 @@ import Signup from "./Signup.jsx";
 import Home from "./Home.jsx";
 import Discussions from "./Discussions.jsx";
 import NavbarLocal from "./NavbarLocal.jsx";
+import DiscussionDetails from "./DiscussionDetails.jsx";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -82,10 +83,13 @@ function App() {
           />
         </Route>
         <Route exact path="/">
-          <Home />
+          <Home isLoggedIn={isLoggedIn} />
         </Route>
         <Route exact path="/discussions">
           <Discussions discussions={discussions} />
+        </Route>
+        <Route exact path="/discussions/:id">
+          <DiscussionDetails discussions={discussions} userId={userId} />
         </Route>
       </Switch>
     </div>

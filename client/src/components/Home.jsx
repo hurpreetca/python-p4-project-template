@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import "./Home.css";
 
-function Home() {
+function Home({ isLoggedIn }) {
   const navigate = useHistory();
   return (
     <div className="main-container">
