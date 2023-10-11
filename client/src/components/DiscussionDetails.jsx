@@ -7,6 +7,7 @@ function DiscussionDetails({ userId }) {
   const [selectedDiscussion, setSelectedDiscussion] = useState({});
   const [newComment, setNewComment] = useState("");
   const [updatedText, setUpdatedText] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
   let { id } = useParams();
   let history = useHistory();
   const idAsInt = parseInt(id, 10);
@@ -20,21 +21,30 @@ function DiscussionDetails({ userId }) {
   const discussion_topic = selectedDiscussion.discussion_topic;
   const discussion_user_id = selectedDiscussion.user_id;
   const comments = selectedDiscussion.comments;
+  const [editedDiscussionTopic, setEditedDiscussionTopic] =
+    useState(discussion_topic);
 
   //Edit a discussion topic
   const handleEditDiscussion = () => {
+    setIsEditing(true);
+  };
+
+  const handleUpdateDiscussion = () => {
     fetch(`/discussions/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ discussion_topic: updatedText }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setSelectedDiscussion(data.discussion);
-      });
+      body: JSON.stringify({ discussion_topic: editedDiscussionTopic }),
+    }).then((response) => {
+      if (response.status === 200) {
+        setIsEditing(false);
+      } else {
+        console.error("Failed to update discussion topic");
+      }
+    });
   };
+
   //Delete a discussion topic
   const handleDeleteDiscussion = () => {
     fetch(`/discussions/${id}`, {
@@ -86,16 +96,35 @@ function DiscussionDetails({ userId }) {
         <Card.Header>
           <h3>
             <strong>Discussion Topic: </strong>
-            {discussion_topic}
+            {isEditing ? (
+              <Form.Control
+                type="text"
+                value={editedDiscussionTopic}
+                onChange={(e) => setEditedDiscussionTopic(e.target.value)}
+              />
+            ) : (
+              discussion_topic
+            )}
           </h3>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <Button variant="danger" onClick={handleEditDiscussion}>
-            &nbsp;&nbsp;&nbsp;Edit&nbsp;&nbsp;&nbsp;
-          </Button>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <Button variant="danger" onClick={handleDeleteDiscussion}>
-            Delete
-          </Button>
+          {userId === discussion_user_id ? (
+            <>
+              {isEditing ? (
+                <Button variant="success" onClick={handleUpdateDiscussion}>
+                  Save
+                </Button>
+              ) : (
+                <Button variant="danger" onClick={handleEditDiscussion}>
+                  Edit
+                </Button>
+              )}
+              &nbsp;&nbsp;&nbsp;
+              <Button variant="danger" onClick={handleDeleteDiscussion}>
+                Delete
+              </Button>
+            </>
+          ) : (
+            <p>&nbsp;</p>
+          )}
         </Card.Header>
       </Card>
       <Card>

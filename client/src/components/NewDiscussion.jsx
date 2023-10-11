@@ -11,6 +11,7 @@ function NewDiscussion({ discussions, setDiscussions, userId }) {
 
     const newDiscussion = {
       discussion_topic: discussionTopic,
+      user_id: userId,
     };
 
     //New discussion topic post
