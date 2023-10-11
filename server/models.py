@@ -66,7 +66,7 @@ class Discussion(db.Model):
     tags= db.relationship("Tag", secondary=discussion_tag, back_populates="discussions")
 
     def __repr__(self):
-        return f"<ID:{self.id}, DISCUSSION-TOPIC:{self.discussion_topic}, CATEGORY:{self.category}>"
+        return f"<ID:{self.id}, DISCUSSION-TOPIC:{self.discussion_topic}>"
 
 
 class Tag(db.Model):

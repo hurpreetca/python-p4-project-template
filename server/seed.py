@@ -106,7 +106,7 @@ if __name__ == '__main__':
         discussions = Discussion.query.all()
         tags = Tag.query.all()
 
-        num_discussion_prefs = randint(1, len(discussions))
+        num_discussion_prefs = randint(1, len(discussions)) 
         num_tag_prefs = randint(1, len(tags))
 
         discussion_prefs = sample(discussions, num_discussion_prefs)
@@ -115,9 +115,9 @@ if __name__ == '__main__':
 
         for discussion in discussion_prefs:
             
-            discussion_tag_relation = discussion_tag.insert().values(
-                    discussion_id=discussion.id)
-    
+            discussion_tag_relation = Discussion.tags.append(tags)
+
+        db.session.add(discussion_tag_relation)
         db.session.commit()
 
         print("Seeding completed\n")

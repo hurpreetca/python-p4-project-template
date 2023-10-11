@@ -172,7 +172,7 @@ class Discussions(Resource):
     def post(self):
         data = request.get_json()
         
-        if not data.get("email"):
+        if not data.get("user_id"):
             return {"errors": ["User must be logged in to create a discussion"]}, 401
 
         if not data.get("discussion_topic"):
